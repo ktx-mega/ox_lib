@@ -173,6 +173,11 @@ const RadialMenu: React.FC = () => {
                 <g
                   transform={`rotate(-${index * pieAngle} 175 175) translate(${sinAngle * gap}, ${cosAngle * gap})`}
                   className={classes.sector}
+                  onMouseEnter={async () => {
+                    const clickIndex =
+                      menu.page === 1 ? index : PAGE_ITEMS * (menu.page - 1) - (menu.page - 1) + index;
+                    if (!item.isMore) fetchNui('radialHover', clickIndex);
+                  }}
                   onClick={async () => {
                     const clickIndex = menu.page === 1 ? index : PAGE_ITEMS * (menu.page - 1) - (menu.page - 1) + index;
                     if (!item.isMore) fetchNui('radialClick', clickIndex);

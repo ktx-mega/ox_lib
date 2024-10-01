@@ -3,6 +3,7 @@
 ---@field label string
 ---@field menu? string
 ---@field onSelect? fun(currentMenu: string | nil, itemIndex: number) | string
+---@field onHover? fun(currentMenu: string | nil, itemIndex: number) | string
 ---@field [string] any
 ---@field keepOpen? boolean
 ---@field iconWidth? number
@@ -225,6 +226,31 @@ RegisterNUICallback('radialClick', function(index, cb)
         end
 
         onSelect(currentMenu, itemIndex)
+    end
+end)
+
+RegisterNUICallback('radialHover', function(index, cb)
+    cb(1)
+
+    local itemIndex = index + 1
+    local item, currentMenu
+
+    if currentRadial then
+        item = currentRadial.items[itemIndex]
+        currentMenu = currentRadial.id
+    else
+        item = menuItems[itemIndex]
+    end
+
+    local menuResource = currentRadial and currentRadial.resource or item.resource
+
+    local onHover = item.onHover
+
+    if onHover then
+        if type(onHover) == 'string' then
+            return exports[menuResource][onHover](0, currentMenu, itemIndex)
+        end
+        onHover(currentMenu, itemIndex)
     end
 end)
 
